@@ -1,0 +1,25 @@
+---
+- name: Install and Configure Nginx
+  hosts: aws
+  become: yes
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start and Enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Check Nginx Status
+      command: systemctl is-active nginx
+      register: nginx_status
+
+    - name: Display Status
+      debug:
+        msg: "Nginx is {{ nginx_status.stdout }}"
