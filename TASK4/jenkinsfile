@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/anuragjnaik/capstone-project-aws.git'
+            }
+        }
+
+        stage('Deploy AWS Page') {
+            steps {
+                sh '''
+                scp -o StrictHostKeyChecking=no \
+                TASK3/index-aws.html \
+                ubuntu@18.207.195.112:/tmp/index.html
+
+                ssh -o StrictHostKeyChecking=no \
+                ubuntu@18.207.195.112 \
+                "sudo mv /tmp/index.html /var/www/html/index.html"
+                '''
+            }
+        }
+
+        stage('Restart Nginx') {
+            steps {
+                sh '''
+                ssh -o StrictHostKeyChecking=no \
+                ubuntu@18.207.195.112 \
+                "sudo systemctl restart nginx"
+                '''
+            }
+        }
+    }
+}
