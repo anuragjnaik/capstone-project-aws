@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/anuragjnaik/capstone-project-aws.git'
-            }
-        }
-
         stage('Deploy AWS Page') {
             steps {
                 sh '''
